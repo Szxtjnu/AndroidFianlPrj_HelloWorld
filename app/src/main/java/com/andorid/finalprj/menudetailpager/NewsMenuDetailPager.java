@@ -1,29 +1,38 @@
 package com.andorid.finalprj.menudetailpager;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.andorid.finalprj.R;
 import com.andorid.finalprj.base.MenuDetailBasePager;
+import com.andorid.finalprj.domain.NewsCenterPagerBean2;
+import com.andorid.finalprj.menudetailpager.tabledetailpager.TableDetailPager;
 import com.andorid.finalprj.util.LogUtil;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewsMenuDetailPager extends MenuDetailBasePager {
 
     @ViewInject(R.id.newsmenu_detail_viewpager)
     private ViewPager viewPager;
 
+    private List<NewsCenterPagerBean2.DetailPagerData.ChildrenData> children;
+    private ArrayList<TableDetailPager> tableDetailPagers;
 
 
-    public NewsMenuDetailPager(Context context) {
+    public NewsMenuDetailPager(Context context, NewsCenterPagerBean2.DetailPagerData detailPagerData) {
         super(context);
+        children = detailPagerData.getChildren();
+
     }
 
     @Override
@@ -38,5 +47,41 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
     public void initData() {
         super.initData();
         LogUtil.e("新闻详情页面被初始化了");
+
+        //准备页面的数据
+        tableDetailPagers = new ArrayList<>();
+        for (int i = 0; i < children.size(); i++) {
+            tableDetailPagers.add(new TableDetailPager(context, children.get(i)));
+        }
+
+        viewPager.setAdapter(new MyNewsMenuDetailPagerAdapter());
     }
+
+    class MyNewsMenuDetailPagerAdapter extends PagerAdapter {
+        @Override
+        public int getCount() {
+            return tableDetailPagers.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            container.removeView((View) object);
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            TableDetailPager tableDetailPager = tableDetailPagers.get(position);
+            View rootView = tableDetailPager.rootView;
+            tableDetailPager.initData();//初始化数据
+            container.addView(rootView);
+            return rootView;
+        }
+    }
+
 }
