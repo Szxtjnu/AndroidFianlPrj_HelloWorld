@@ -55,6 +55,7 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
         }
 
         viewPager.setAdapter(new MyNewsMenuDetailPagerAdapter());
+
     }
 
     class MyNewsMenuDetailPagerAdapter extends PagerAdapter {
