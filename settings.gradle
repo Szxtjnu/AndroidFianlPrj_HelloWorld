@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        maven{url 'https://maven.aliyun.com/repository/public'}
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven{url 'https://maven.aliyun.com/repository/public'}
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "FinalPrj"
+include ':app'
+include ':SlidingMenu_library'
+project(':SlidingMenu_library').projectDir = new File(rootDir, 'SlidingMenu-master/library/')
+include ':SlidingMenu_library'
+

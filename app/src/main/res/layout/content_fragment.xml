@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <RadioGroup
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            style="@style/bottom_tag_style"
+            android:background="@drawable/rb_home_drawable_selector" />
+
+        <RadioButton
+            android:id="@+id/rb_discover"
+            style="@style/bottom_tag_style"
+            android:background="@drawable/rb_discover_drawable_selector" />
+
+        <RadioButton
+            android:id="@+id/rb_course"
+            style="@style/bottom_tag_style"
+            android:background="@drawable/rb_course_drawable_selector" />
+
+        <RadioButton
+            android:id="@+id/rb_mine"
+            style="@style/bottom_tag_style"
+            android:background="@drawable/rb_mine_drawable_selector" />
+    </RadioGroup>
+
+
+</LinearLayout>
