@@ -5,13 +5,15 @@
     android:orientation="vertical">
 
     <com.andorid.indicator.TabPageIndicator
+        android:id="@+id/tablePagerIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/newsmenu_detail_viewpager"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp" />
 
 
 </LinearLayout>

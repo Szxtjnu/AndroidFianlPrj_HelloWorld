@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -13,6 +14,7 @@ import com.andorid.finalprj.base.MenuDetailBasePager;
 import com.andorid.finalprj.domain.NewsCenterPagerBean2;
 import com.andorid.finalprj.menudetailpager.tabledetailpager.TableDetailPager;
 import com.andorid.finalprj.util.LogUtil;
+import com.andorid.indicator.TabPageIndicator;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -21,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsMenuDetailPager extends MenuDetailBasePager {
+
+    @ViewInject(R.id.tablePagerIndicator)
+    private TabPageIndicator tabPageIndicator;
 
     @ViewInject(R.id.newsmenu_detail_viewpager)
     private ViewPager viewPager;
@@ -56,9 +61,17 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
 
         viewPager.setAdapter(new MyNewsMenuDetailPagerAdapter());
 
+        tabPageIndicator.setViewPager(viewPager);
     }
 
     class MyNewsMenuDetailPagerAdapter extends PagerAdapter {
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return children.get(position).getTitle();
+        }
+
         @Override
         public int getCount() {
             return tableDetailPagers.size();
