@@ -6,13 +6,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.andorid.finalprj.R;
 import com.andorid.finalprj.base.MenuDetailBasePager;
 import com.andorid.finalprj.domain.NewsCenterPagerBean2;
+import com.andorid.finalprj.util.Constants;
+import com.andorid.finalprj.util.LogUtil;
 
 public class TableDetailPager extends MenuDetailBasePager {
 
     private final NewsCenterPagerBean2.DetailPagerData.ChildrenData childrenData;
-    private TextView textView;
+    private String url;
 
     public TableDetailPager(Context context, NewsCenterPagerBean2.DetailPagerData.ChildrenData childrenData) {
         super(context);
@@ -21,15 +24,14 @@ public class TableDetailPager extends MenuDetailBasePager {
 
     @Override
     public View initView() {
-        textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.RED);
-        textView.setTextSize(25);
-        return textView;
+        View view = View.inflate(context, R.layout.table_detail_pager, null);
+        return view;
     }
 
     public void initData() {
         super.initData();
-        textView.setText(childrenData.getTitle());
+        url = Constants.BASE_URL + childrenData.getUrl();
+        LogUtil.e(childrenData.getTitle() + "的联网地址=====" + url);
+
     }
 }

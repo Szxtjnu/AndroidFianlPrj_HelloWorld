@@ -10,11 +10,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.andorid.finalprj.R;
+import com.andorid.finalprj.activity.MainActivity;
 import com.andorid.finalprj.base.MenuDetailBasePager;
 import com.andorid.finalprj.domain.NewsCenterPagerBean2;
 import com.andorid.finalprj.menudetailpager.tabledetailpager.TableDetailPager;
 import com.andorid.finalprj.util.LogUtil;
 import com.andorid.indicator.TabPageIndicator;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -62,7 +64,34 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
         viewPager.setAdapter(new MyNewsMenuDetailPagerAdapter());
 
         tabPageIndicator.setViewPager(viewPager);
+
+        tabPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    isEnableSlidingMenu(SlidingMenu.TOUCHMODE_FULLSCREEN);
+                } else {
+                    isEnableSlidingMenu(SlidingMenu.TOUCHMODE_NONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
+
+    private void isEnableSlidingMenu(int touchModeFullscreen) {
+        MainActivity mainActivity = (MainActivity) context;
+        mainActivity.getSlidingMenu().setTouchModeAbove(touchModeFullscreen);
+    }
+
 
     class MyNewsMenuDetailPagerAdapter extends PagerAdapter {
 
