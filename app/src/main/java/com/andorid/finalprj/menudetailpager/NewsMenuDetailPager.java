@@ -74,7 +74,7 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    isEnableSlidingMenu(SlidingMenu.TOUCHMODE_FULLSCREEN);
+                    isEnableSlidingMenu(SlidingMenu.TOUCHMODE_MARGIN);
                 } else {
                     isEnableSlidingMenu(SlidingMenu.TOUCHMODE_NONE);
                 }
