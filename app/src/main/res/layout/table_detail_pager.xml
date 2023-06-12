@@ -45,6 +45,8 @@
     </RelativeLayout>
 
     <ListView
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
         android:id="@+id/table_detail_list_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
