@@ -59,10 +59,14 @@ public class TableDetailPager extends MenuDetailBasePager {
     @Override
     public View initView() {
         View view = View.inflate(context, R.layout.table_detail_pager, null);
-        viewPager = view.findViewById(R.id.table_detail_viewpager);
-        tv_title = view.findViewById(R.id.table_detail_tvTitle);
-        ll_point_group = view.findViewById(R.id.table_detail_ll_point_group);
         listView = view.findViewById(R.id.table_detail_list_view);
+
+        View topNewsView = View.inflate(context, R.layout.topnews, null);
+        viewPager = topNewsView.findViewById(R.id.table_detail_viewpager);
+        tv_title = topNewsView.findViewById(R.id.table_detail_tvTitle);
+        ll_point_group = topNewsView.findViewById(R.id.table_detail_ll_point_group);
+
+        listView.addHeaderView(topNewsView);
         return view;
     }
 
