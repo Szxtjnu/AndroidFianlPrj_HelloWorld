@@ -17,7 +17,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:paddingBottom="10dp"
+            >
 
             <ImageView
                 android:id="@+id/iv_rowdots"
@@ -27,6 +29,7 @@
                 android:src="@drawable/row_dots" />
 
             <ProgressBar
+                android:visibility="invisible"
                 android:id="@+id/pb_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

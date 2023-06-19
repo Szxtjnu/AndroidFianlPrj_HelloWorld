@@ -59,12 +59,12 @@ public class HomePager extends BasePager {
             }
         });
 
-        TextView textView = new TextView(context);
-        textView.setText("这是主页面");
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.RED);
-        textView.setTextSize(25);
-        fl_content.addView(textView);
+//        TextView textView = new TextView(context);
+//        textView.setText("这是主页面");
+//        textView.setGravity(Gravity.CENTER);
+//        textView.setTextColor(Color.RED);
+//        textView.setTextSize(25);
+//        fl_content.addView(textView);
 
         //获取缓存数据
 //        String saveJson = CacheUtils.getString(context, Constants.HELLO_WORLD_PAGER_URL);

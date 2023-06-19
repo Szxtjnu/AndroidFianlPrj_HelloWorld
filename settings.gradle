@@ -21,9 +21,4 @@ project(':SlidingMenu_library').projectDir = new File(rootDir, 'SlidingMenu-mast
 include ':SlidingMenu_library'
 
 
-
-
-
-include ':library'
-include ':ViewPagerIndicator-sample'
 include ':indicator'

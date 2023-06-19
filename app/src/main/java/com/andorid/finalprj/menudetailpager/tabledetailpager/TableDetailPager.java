@@ -68,8 +68,17 @@ public class TableDetailPager extends MenuDetailBasePager {
         ll_point_group = topNewsView.findViewById(R.id.table_detail_ll_point_group);
 
         listView.addHeaderView(topNewsView);
+
+        listView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+            @Override
+            public void onPullDownRefresh() {
+                getDataFromNet();
+            }
+        });
+
         return view;
     }
+
 
     public void initData() {
         super.initData();
@@ -85,12 +94,15 @@ public class TableDetailPager extends MenuDetailBasePager {
 
     private void getDataFromNet() {
         RequestParams params = new RequestParams(url);
+        params.setConnectTimeout(30000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 CacheUtils.putString(context, url, result);
                 LogUtil.e(childrenData.getTitle() + "页面数据请求成功=====");
                 processData(result);
+
+                listView.onRefreshFinish(true);
             }
 
             @Override

@@ -11,10 +11,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/SlidingMenu-master/library" />
-            <option value="$PROJECT_DIR$/ViewPagerIndicator-sample" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/indicator" />
-            <option value="$PROJECT_DIR$/library" />
           </set>
         </option>
       </GradleProjectSettings>
