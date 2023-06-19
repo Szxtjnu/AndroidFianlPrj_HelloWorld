@@ -26,6 +26,7 @@ import com.andorid.finalprj.domain.TabDetailPagerBean;
 import com.andorid.finalprj.util.CacheUtils;
 import com.andorid.finalprj.util.Constants;
 import com.andorid.finalprj.util.LogUtil;
+import com.andorid.finalprj.view.RefreshListView;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -40,7 +41,7 @@ public class TableDetailPager extends MenuDetailBasePager {
     private ViewPager viewPager;
     private TextView tv_title;
     private LinearLayout ll_point_group;
-    private ListView listView;
+    private RefreshListView listView;
     private List<TabDetailPagerBean.DataBean.NewsData> news;
 
     private TabDetailPagerListAdapter adapter;

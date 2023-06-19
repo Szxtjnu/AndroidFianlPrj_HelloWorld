@@ -50,7 +50,7 @@ public class HorizontalScrollViewPager extends ViewPager {
                     //水平方向滑动
                     if (getCurrentItem() == 0 && distanceX > 0) {
                         getParent().requestDisallowInterceptTouchEvent(false);
-                    } else if ((getCurrentItem() == getAdapter().getCount() - 1) && distanceX < 0) {
+                    } else if ((getCurrentItem() == (getAdapter().getCount() - 1)) && distanceX < 0) {
                         getParent().requestDisallowInterceptTouchEvent(false);
                     } else {
                         getParent().requestDisallowInterceptTouchEvent(true);
@@ -61,7 +61,6 @@ public class HorizontalScrollViewPager extends ViewPager {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                break;
             default:
                 break;
         }
