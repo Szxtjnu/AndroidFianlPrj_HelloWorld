@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -14,9 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.andorid.finalprj.R;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 自定义下拉刷新的ListView
@@ -37,6 +34,9 @@ public class RefreshListView extends ListView {
     public static final int RELEASE_REFRESH = 1;
     public static final int REFRESHING = 2;
     private int currentStatus = PULL_DOWN_REFRESH;
+    private View footerView;
+    private int measuredHeight;
+    private boolean isLoadMore = false;
 
     public RefreshListView(Context context) {
         this(context, null);
@@ -50,12 +50,38 @@ public class RefreshListView extends ListView {
         super(context, attrs, defStyleAttr);
         initHeaderView(context);
         initAnimation();
-        setOnRefreshListener(new OnRefreshListener() {
+        initFooterView(context);
+    }
+
+    private void initFooterView(Context context) {
+        footerView = View.inflate(context, R.layout.refresh_footer, null);
+        footerView.measure(0, 0);
+        measuredHeight = footerView.getMeasuredHeight();
+
+        footerView.setPadding(0, -measuredHeight, 0, 0);
+
+        addFooterView(footerView);
+
+        setOnScrollListener(new OnScrollListener() {
             @Override
-            public void onPullDownRefresh() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
+                    if (getLastVisiblePosition() == getCount() - 1) {
+                        footerView.setPadding(8, 8, 8, 8);
+                        isLoadMore = true;
+                        if (mOnRefreshListener != null) {
+                            mOnRefreshListener.onLoadMore();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
             }
         });
+
     }
 
 
@@ -151,19 +177,27 @@ public class RefreshListView extends ListView {
     }
 
     public void onRefreshFinish(boolean success) {
-        currentStatus = PULL_DOWN_REFRESH;
-        iv_arrow.clearAnimation();
-        pb_status.setVisibility(GONE);
-        iv_arrow.setVisibility(INVISIBLE);
-        ll_pulldown_refresh.setPadding(0, -high, 0, 0);
-        if (!success) {
-            Toast.makeText(getContext(), "数据请求失败，请检查网络设置", Toast.LENGTH_LONG).show();
+        if (isLoadMore) {
+            isLoadMore = false;
+            footerView.setPadding(0, -high, 0, 0);
+        } else {
+            currentStatus = PULL_DOWN_REFRESH;
+            iv_arrow.clearAnimation();
+            pb_status.setVisibility(GONE);
+            iv_arrow.setVisibility(INVISIBLE);
+            ll_pulldown_refresh.setPadding(0, -high, 0, 0);
+            if (!success) {
+                Toast.makeText(getContext(), "数据请求失败，请检查网络设置", Toast.LENGTH_LONG).show();
+            }
         }
+
 
     }
 
     public interface OnRefreshListener {
         public void onPullDownRefresh();
+
+        public void onLoadMore();
     }
 
     private OnRefreshListener mOnRefreshListener;

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -51,6 +52,8 @@ public class TableDetailPager extends MenuDetailBasePager {
     private String url;
     //顶部新闻的数据/顶部轮播图
     private List<TabDetailPagerBean.DataBean.TopnewsData> topnews;
+    private String moreUrl;
+    private boolean isLoadMore = false;
 
     public TableDetailPager(Context context, NewsCenterPagerBean2.DetailPagerData.ChildrenData childrenData) {
         super(context);
@@ -74,9 +77,47 @@ public class TableDetailPager extends MenuDetailBasePager {
             public void onPullDownRefresh() {
                 getDataFromNet();
             }
+
+            @Override
+            public void onLoadMore() {
+                if (TextUtils.isEmpty(moreUrl)) {
+                    Toast.makeText(context, "没有更多数据", Toast.LENGTH_SHORT).show();
+                    listView.onRefreshFinish(false);
+                } else {
+                    getMoreDataFromNet();
+                }
+            }
         });
 
         return view;
+    }
+
+    private void getMoreDataFromNet() {
+        RequestParams params = new RequestParams(moreUrl);
+        params.setConnectTimeout(4000);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                isLoadMore = true;
+                processData(result);
+                listView.onRefreshFinish(false);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                listView.onRefreshFinish(false);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
 
@@ -128,86 +169,101 @@ public class TableDetailPager extends MenuDetailBasePager {
         TabDetailPagerBean bean = parsedJson(json);
         LogUtil.e(bean.getData().getNews().get(0).getTitle());
 
-        //顶部轮播图数据
-        topnews = bean.getData().getTopnews();
+        moreUrl = "";
 
-        //设置ViewPager的适配器
-        viewPager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return topnews.size();
-            }
-
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-                return view == object;
-            }
-
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                ImageView imageView = new ImageView(context);
-                imageView.setBackgroundResource(R.drawable.home_scroll_default);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                container.addView(imageView);
-
-                TabDetailPagerBean.DataBean.TopnewsData topnewsData = topnews.get(position);
-                String topimageurl = Constants.BASE_URL + topnewsData.getTopimage();
-                x.image().bind(imageView, topimageurl);
-
-                return imageView;
-            }
-
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                container.removeView((View) object);
-            }
-        });
-
-        ll_point_group.removeAllViews();
-
-        for (int i = 0; i < topnews.size(); i++) {
-            ImageView imageView = new ImageView(context);
-            imageView.setBackgroundResource(R.drawable.point_selector);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DensityUtil.dip2px(8.0F), DensityUtil.dip2px(8.0F));
-            if (i == 0) {
-                imageView.setEnabled(true);
-            } else {
-                imageView.setEnabled(false);
-                params.leftMargin = DensityUtil.dip2px(8);
-            }
-            imageView.setLayoutParams(params);
-            ll_point_group.addView(imageView);
+        if (TextUtils.isEmpty(bean.getData().getMore())) {
+            moreUrl = "";
+        } else {
+            moreUrl = Constants.BASE_URL + bean.getData().getMore();
         }
 
-        //监听页面的改变，设置focus点的变化
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        //默认和加载更多
+        if (!isLoadMore) {
+            topnews = bean.getData().getTopnews();
 
+            //设置ViewPager的适配器
+            viewPager.setAdapter(new PagerAdapter() {
+                @Override
+                public int getCount() {
+                    return topnews.size();
+                }
+
+                @Override
+                public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                    return view == object;
+                }
+
+                @NonNull
+                @Override
+                public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                    ImageView imageView = new ImageView(context);
+                    imageView.setBackgroundResource(R.drawable.home_scroll_default);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    container.addView(imageView);
+
+                    TabDetailPagerBean.DataBean.TopnewsData topnewsData = topnews.get(position);
+                    String topimageurl = Constants.BASE_URL + topnewsData.getTopimage();
+                    x.image().bind(imageView, topimageurl);
+
+                    return imageView;
+                }
+
+                @Override
+                public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                    container.removeView((View) object);
+                }
+            });
+
+            ll_point_group.removeAllViews();
+
+            for (int i = 0; i < topnews.size(); i++) {
+                ImageView imageView = new ImageView(context);
+                imageView.setBackgroundResource(R.drawable.point_selector);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DensityUtil.dip2px(8.0F), DensityUtil.dip2px(8.0F));
+                if (i == 0) {
+                    imageView.setEnabled(true);
+                } else {
+                    imageView.setEnabled(false);
+                    params.leftMargin = DensityUtil.dip2px(8);
+                }
+                imageView.setLayoutParams(params);
+                ll_point_group.addView(imageView);
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                //当页面被选中后，首先需要设置文本
-                tv_title.setText(topnews.get(position).getTitle());
-                //对应页面的点变成focus
-                ll_point_group.getChildAt(prePosition).setEnabled(false);
-                ll_point_group.getChildAt(position).setEnabled(true);
-                prePosition = position;
-            }
+            //监听页面的改变，设置focus点的变化
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                }
 
-            }
-        });
-        tv_title.setText(topnews.get(prePosition).getTitle());
+                @Override
+                public void onPageSelected(int position) {
+                    //当页面被选中后，首先需要设置文本
+                    tv_title.setText(topnews.get(position).getTitle());
+                    //对应页面的点变成focus
+                    ll_point_group.getChildAt(prePosition).setEnabled(false);
+                    ll_point_group.getChildAt(position).setEnabled(true);
+                    prePosition = position;
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+            tv_title.setText(topnews.get(prePosition).getTitle());
 
 
-        news = bean.getData().getNews();
-        adapter = new TabDetailPagerListAdapter();
-        listView.setAdapter(adapter);
+            news = bean.getData().getNews();
+            adapter = new TabDetailPagerListAdapter();
+            listView.setAdapter(adapter);
+        } else {
+            isLoadMore = false;
+            news.addAll(bean.getData().getNews());
+            adapter.notifyDataSetChanged();
+        }
+
 
     }
 
