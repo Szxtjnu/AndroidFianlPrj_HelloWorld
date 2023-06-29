@@ -1,12 +1,14 @@
 package com.andorid.finalprj.menudetailpager.tabledetailpager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.andorid.finalprj.R;
+import com.andorid.finalprj.activity.NewsDetailActivity;
 import com.andorid.finalprj.base.BasePager;
 import com.andorid.finalprj.base.MenuDetailBasePager;
 import com.andorid.finalprj.domain.NewsCenterPagerBean2;
@@ -54,6 +57,7 @@ public class TableDetailPager extends MenuDetailBasePager {
     private List<TabDetailPagerBean.DataBean.TopnewsData> topnews;
     private String moreUrl;
     private boolean isLoadMore = false;
+    public static final String READ_ARRAY_ID = "read_array_id";
 
     public TableDetailPager(Context context, NewsCenterPagerBean2.DetailPagerData.ChildrenData childrenData) {
         super(context);
@@ -70,7 +74,9 @@ public class TableDetailPager extends MenuDetailBasePager {
         tv_title = topNewsView.findViewById(R.id.table_detail_tvTitle);
         ll_point_group = topNewsView.findViewById(R.id.table_detail_ll_point_group);
 
-        listView.addHeaderView(topNewsView);
+//        listView.addHeaderView(topNewsView);
+
+        listView.addTopNewsView(topNewsView);
 
         listView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
             @Override
@@ -88,6 +94,25 @@ public class TableDetailPager extends MenuDetailBasePager {
                 }
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int realPosition = position - 1;
+                TabDetailPagerBean.DataBean.NewsData newsData = news.get(realPosition);
+                String idArray = CacheUtils.getString(context, READ_ARRAY_ID);
+                if (!idArray.contains(newsData.getId() + "")) {
+                    CacheUtils.putString(context, READ_ARRAY_ID, idArray + newsData.getId() + ",");
+                    adapter.notifyDataSetChanged();
+                }
+
+                Intent intent = new Intent(context, NewsDetailActivity.class);
+                intent.putExtra("url", Constants.BASE_URL + newsData.getUrl());
+                intent.putExtra("title", newsData.getTitle());
+                context.startActivity(intent);
+            }
+        });
+
 
         return view;
     }
@@ -128,7 +153,6 @@ public class TableDetailPager extends MenuDetailBasePager {
         if (!TextUtils.isEmpty(saveJson)) {
             processData(saveJson);
         }
-//        LogUtil.e(childrenData.getTitle() + "的联网地址=====" + url);
 
         getDataFromNet();
     }
@@ -304,6 +328,13 @@ public class TableDetailPager extends MenuDetailBasePager {
             x.image().bind(viewHolder.iv_icon, imageUrl);
             viewHolder.tv_title.setText(newsData.getTitle());
             viewHolder.tv_time.setText(newsData.getPubdate());
+
+            String idArray = CacheUtils.getString(context, READ_ARRAY_ID);
+            if (idArray.contains(newsData.getId() + "")) {
+                viewHolder.tv_title.setTextColor(Color.GRAY);
+            } else {
+                viewHolder.tv_title.setTextColor(Color.rgb(47, 46, 52));
+            }
 
             return convertView;
         }

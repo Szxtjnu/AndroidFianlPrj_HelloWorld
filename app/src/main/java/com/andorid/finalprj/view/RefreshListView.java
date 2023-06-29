@@ -1,6 +1,7 @@
 package com.andorid.finalprj.view;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +23,7 @@ public class RefreshListView extends ListView {
     /**
      * 下拉刷新和顶部轮播图
      */
-    private ListView headerView;
+    private LinearLayout headerView;
     private Animation upAnimation;
     private Animation downAnimation;
     private View ll_pulldown_refresh;
@@ -37,6 +38,8 @@ public class RefreshListView extends ListView {
     private View footerView;
     private int measuredHeight;
     private boolean isLoadMore = false;
+    private View topNewsView;
+    private int listViewOnScreenY = -1;
 
     public RefreshListView(Context context) {
         this(context, null);
@@ -96,7 +99,7 @@ public class RefreshListView extends ListView {
     }
 
     private void initHeaderView(Context context) {
-        LinearLayout headerView = (LinearLayout) View.inflate(context, R.layout.refresh_header, null);
+        headerView = (LinearLayout) View.inflate(context, R.layout.refresh_header, null);
         ll_pulldown_refresh = headerView.findViewById(R.id.ll_pulldown_refresh);
         iv_arrow = headerView.findViewById(R.id.iv_rowdots);
         pb_status = headerView.findViewById(R.id.pb_status);
@@ -120,6 +123,11 @@ public class RefreshListView extends ListView {
             case MotionEvent.ACTION_MOVE:
                 if (startY == -1) {
                     startY = ev.getY();
+                }
+
+                //判断顶部轮播图是否完全显示，当轮播图完全显示的时候，才会触发下拉刷新的功能
+                if (!isDisplayTopNews()) {
+                    break;
                 }
 
                 if (currentStatus == REFRESHING) {
@@ -160,6 +168,18 @@ public class RefreshListView extends ListView {
         return super.onTouchEvent(ev);
     }
 
+    private boolean isDisplayTopNews() {
+        int[] location = new int[2];
+        if (listViewOnScreenY == -1) {
+            getLocationOnScreen(location);
+            listViewOnScreenY = location[1];
+        }
+        topNewsView.getLocationOnScreen(location);
+        int topNewsViewOnScreenY = location[1];
+
+        return listViewOnScreenY <= topNewsViewOnScreenY;
+    }
+
     private void refreshViewState() {
         switch (currentStatus) {
             case PULL_DOWN_REFRESH:
@@ -191,6 +211,18 @@ public class RefreshListView extends ListView {
             }
         }
 
+
+    }
+
+    /**
+     * 添加顶部轮播图
+     * @param topNewsView
+     */
+    public void addTopNewsView(View topNewsView) {
+        if (topNewsView != null) {
+            this.topNewsView = topNewsView;
+            headerView.addView(topNewsView);
+        }
 
     }
 
