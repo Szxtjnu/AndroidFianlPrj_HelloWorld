@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.andorid.finalprj.R;
+import com.andorid.finalprj.pager.MinePager;
 import com.andorid.finalprj.util.DBHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (dbHelper.login(username, password)) {
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "登录失败，请检查用户名和密码", Toast.LENGTH_SHORT).show();

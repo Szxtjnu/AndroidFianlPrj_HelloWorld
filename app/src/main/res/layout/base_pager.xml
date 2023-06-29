@@ -9,6 +9,12 @@
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/personal_details_page"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </LinearLayout>

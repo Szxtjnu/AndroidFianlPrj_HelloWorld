@@ -47,8 +47,6 @@ public class ContentFragment extends BaseFragment {
     public View initView() {
         LogUtil.e("正文Fragment视图被初始化了");
         View view = View.inflate(context, R.layout.content_fragment, null);
-//        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-//        rg_main = (RadioGroup) view.findViewById(R.id.view_pager);
 
         //把视图注入到框架中，让类和view关联
         x.view().inject(ContentFragment.this, view);

@@ -2,10 +2,13 @@ package com.andorid.finalprj.base;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.andorid.finalprj.R;
 
@@ -17,6 +20,11 @@ public class BasePager {
     public ImageButton ib_button;
     public FrameLayout fl_content;
     public EditText search_bar;
+
+    public LinearLayout layout;
+    public TextView textView;
+    public Button button;
+
     public BasePager(Context context) {
         this.context = context;
         rootView = initView();
@@ -28,6 +36,9 @@ public class BasePager {
         ib_button = (ImageButton) view.findViewById(R.id.ib_menu);
         fl_content = (FrameLayout) view.findViewById(R.id.fl_content);
         search_bar = (EditText) view.findViewById(R.id.search_bar);
+        layout = (LinearLayout) view.findViewById(R.id.linear_layout);
+        textView = (TextView) view.findViewById(R.id.show_username);
+        button = (Button) view.findViewById(R.id.logout);
         return view;
     }
 

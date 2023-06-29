@@ -66,6 +66,7 @@ public class GuideActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CacheUtils.putBoolean(GuideActivity.this, SplashActivity.START_MAIN, true);
                 Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -74,6 +75,7 @@ public class GuideActivity extends Activity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CacheUtils.putBoolean(GuideActivity.this, SplashActivity.START_MAIN, true);
                 Intent intent = new Intent(GuideActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
