@@ -63,6 +63,22 @@ public class GuideActivity extends Activity {
                 R.drawable.guide_page4,
         };
 
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuideActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
         widthdpi = DensityUtil.dip2px(this, 10);
 
         imageViews = new ArrayList<>();
