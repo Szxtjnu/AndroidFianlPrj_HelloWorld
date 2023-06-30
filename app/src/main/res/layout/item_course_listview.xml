@@ -13,7 +13,7 @@
             android:layout_height="100dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             android:src="#000000" />
 
         <LinearLayout

@@ -107,7 +107,7 @@ public class TableDetailPager extends MenuDetailBasePager {
                 }
 
                 Intent intent = new Intent(context, NewsDetailActivity.class);
-                intent.putExtra("url", Constants.BASE_URL + newsData.getUrl());
+                intent.putExtra("url", newsData.getUrl());
                 intent.putExtra("title", newsData.getTitle());
                 context.startActivity(intent);
             }
@@ -226,7 +226,7 @@ public class TableDetailPager extends MenuDetailBasePager {
                     container.addView(imageView);
 
                     TabDetailPagerBean.DataBean.TopnewsData topnewsData = topnews.get(position);
-                    String topimageurl = Constants.BASE_URL + topnewsData.getTopimage();
+                    String topimageurl = topnewsData.getTopimage();
                     x.image().bind(imageView, topimageurl);
 
                     return imageView;
@@ -324,7 +324,7 @@ public class TableDetailPager extends MenuDetailBasePager {
             }
 
             TabDetailPagerBean.DataBean.NewsData newsData = news.get(position);
-            String imageUrl = Constants.BASE_URL + newsData.getListimage();
+            String imageUrl = newsData.getListimage();
             x.image().bind(viewHolder.iv_icon, imageUrl);
             viewHolder.tv_title.setText(newsData.getTitle());
             viewHolder.tv_time.setText(newsData.getPubdate());
