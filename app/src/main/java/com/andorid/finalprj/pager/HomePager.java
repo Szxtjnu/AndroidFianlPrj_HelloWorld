@@ -95,7 +95,6 @@ public class HomePager extends BasePager {
     }
 
     private void processData(String json) {
-//        HomeCenterPagerBean bean = parsedJson(json);
         NewsCenterPagerBean2 bean2 = parsedJson2(json);
 //        String title = bean.getData().get(0).getChildren().get(1).getTitle();
 //        LogUtil.e("使用Gson解析json数据成功==" + title);

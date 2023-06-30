@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.andorid.finalprj.R;
@@ -24,6 +25,7 @@ public class BasePager {
     public LinearLayout layout;
     public TextView textView;
     public Button button;
+    public ListView listView;
 
     public BasePager(Context context) {
         this.context = context;
@@ -39,6 +41,7 @@ public class BasePager {
         layout = (LinearLayout) view.findViewById(R.id.linear_layout);
         textView = (TextView) view.findViewById(R.id.show_username);
         button = (Button) view.findViewById(R.id.logout);
+        listView = (ListView) view.findViewById(R.id.course_listview);
         return view;
     }
 

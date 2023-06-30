@@ -15,6 +15,10 @@
             layout="@layout/personal_details_page"
             android:visibility="gone" />
 
+        <include
+            layout="@layout/course_listview"
+            android:visibility="visible"/>
+
     </FrameLayout>
 
 </LinearLayout>
